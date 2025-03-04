@@ -1,0 +1,56 @@
+/ {
+    /* 
+     * Указываем, что наша основная клавиатура (zmk,keyboard) 
+     * будет описана узлом &my_matrix.
+     */
+    chosen {
+        zmk,keyboard = &my_matrix;
+    };
+};
+
+/* 
+ * Узел my_matrix: описывает физическую клавиатурную матрицу
+ * с 7 строками и 6 столбцами, а также конкретные пины 
+ * микроконтроллера (Nice!Nano или клон).
+ */
+&my_matrix {
+    compatible = "zmk,matrix-transform";
+
+    /* Количество строк и столбцов */
+    rows = <7>;
+    cols = <6>;
+
+    /* Список пинов для строк (row-gpios) */
+    /* В скобках "GPIO_ACTIVE_LOW" можно заменить на другое значение,
+       если в схеме требуются другие настройки (Pull-Up/Down). */
+    row-gpios =
+        <&gpio0 29 GPIO_ACTIVE_LOW>,  /* R0 -> P0.29 */
+        <&gpio0 2  GPIO_ACTIVE_LOW>,  /* R1 -> P0.02 */
+        <&gpio1 15 GPIO_ACTIVE_LOW>,  /* R2 -> P1.15 */
+        <&gpio1 13 GPIO_ACTIVE_LOW>,  /* R3 -> P1.13 */
+        <&gpio1 11 GPIO_ACTIVE_LOW>,  /* R4 -> P1.11 */
+        <&gpio0 10 GPIO_ACTIVE_LOW>,  /* R5 -> P0.10 */
+        <&gpio0 9  GPIO_ACTIVE_LOW>;  /* R6 -> P0.09 */
+
+    /* Список пинов для столбцов (col-gpios) */
+    col-gpios =
+        <&gpio0 22 GPIO_ACTIVE_LOW>,  /* C0 -> P0.22 */
+        <&gpio0 24 GPIO_ACTIVE_LOW>,  /* C1 -> P0.24 */
+        <&gpio1 0  GPIO_ACTIVE_LOW>,  /* C2 -> P1.00 */
+        <&gpio0 11 GPIO_ACTIVE_LOW>,  /* C3 -> P0.11 */
+        <&gpio1 4  GPIO_ACTIVE_LOW>,  /* C4 -> P1.04 */
+        <&gpio1 6  GPIO_ACTIVE_LOW>;  /* C5 -> P1.06 */
+};
+
+/*
+ * Включаем split-режим (BLE). 
+ * Указываем, что у нас есть левая и правая половины,
+ * обе ссылаются на ту же матрицу (&my_matrix).
+ */
+&left_side {
+    zmk,matrix = &my_matrix;
+};
+
+&right_side {
+    zmk,matrix = &my_matrix;
+};
